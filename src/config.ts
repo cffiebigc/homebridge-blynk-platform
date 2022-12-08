@@ -142,7 +142,7 @@ export class BlynkDeviceConfig {
             }
         }
 
-        this.serverUrl      = `${baseUrl}/${this.token}`;
+        this.serverUrl      = `${baseUrl}`;
         this.manufacturer   = config['manufacturer']    as string    ?? "Wojstead";
         this.discover       = config['discover']        as boolean   ?? false;
 
@@ -166,7 +166,8 @@ export class BlynkDeviceConfig {
                         'min':      acc['min']          as number,
                         'value':    acc['value']        as string,
                         'model':    acc['model']        as string,
-                        'typeOf':   acc['typeOf']       as string ?? HOMEKIT_TYPES.OUTLET
+                        'typeOf':   acc['typeOf']       as string ?? HOMEKIT_TYPES.OUTLET,
+                        'token':    this.token          as string
                     };
                     this.log.info(`Adding accessory: ${widget.label}`);
                     this.addWidget(widget);
@@ -210,7 +211,8 @@ export class BlynkDeviceConfig {
                             "max":          widget.max,
                             "typeOf":       widget.typeOf,
                             "model":        widget.model,
-                            "manufacturer": this.manufacturer
+                            "manufacturer": this.manufacturer,
+                            "token":        widget.token
                         }
                     ));
                     this.log.info(`addWidget found: ${this.widgets.slice(-1)[0].toString()}`);
@@ -229,7 +231,8 @@ export class BlynkDeviceConfig {
                             "max":          widget.max,
                             "typeOf":       widget.typeOf,
                             "model":        widget.model,
-                            "manufacturer": this.manufacturer
+                            "manufacturer": this.manufacturer,
+                            "token":        widget.token
                         }
                     ));
                     this.log.info(`addWidget found: ${this.widgets.slice(-1)[0].toString()}`);

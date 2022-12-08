@@ -1,3 +1,4 @@
+import { Token } from './../node_modules/path-to-regexp/index.d';
 import {
     Logging,
 } from "homebridge"
@@ -16,6 +17,7 @@ export interface IBlynkWidget {
     value:      string;
     typeOf:     string;         // Type of HomeKit item being implemented
     model:      string;         // Item model
+    token:      string;
 }
 
 /*
@@ -31,6 +33,7 @@ export abstract class BlynkWidgetBase {
     protected widgetType:           string;
     protected pinType:              string;
     protected pinNumber:            number;
+    protected token:                string;
     protected pinUrlLabel:          string;
     protected pinLabel:             string;
     protected typeOf:               HOMEKIT_TYPES;
@@ -48,6 +51,7 @@ export abstract class BlynkWidgetBase {
         this.pinNumber      = widget['pinnumber']            as number   ?? 0;
         this.pinLabel       = widget['label']                as string   ?? `${this.name}`
         this.model          = widget['model']                as string   ?? this.pinLabel;
+        this.token          = widget['token']                as string   ?? "";
         this.pinUrlLabel    = (this.pinType.toLowerCase() === 'virtual')
                                     ? `V${this.pinNumber}`
                                     : `D${this.pinNumber}`;
@@ -62,7 +66,7 @@ export abstract class BlynkWidgetBase {
     getPinType():       string          { return this.pinType; }
     getPinNumber():     number          { return this.pinNumber; }
     getPinLabel():      string          { return this.pinLabel; }
-    getPin():           string          { return `${this.baseUrl}/get/${this.pinUrlLabel}`; }
+    getPin():           string          { return `${this.baseUrl}/external/api/get?token=${this.token}&${this.pinUrlLabel}`; }
 
     // Blynk server URL to set new value for the pin
     abstract setPin():      string;
@@ -113,7 +117,7 @@ export class BlynkWidgetButton extends BlynkWidgetBase {
     }
 
     setPin(): string {
-        return `${this.baseUrl}/update/${this.pinUrlLabel}?value=${this.curValue}`;
+        return `${this.baseUrl}/external/api/update?token=${this.token}&${this.pinUrlLabel}=${this.curValue}`;
     }
     setValue(value: string): void {
         this.curValue = (value === 'true') ? 1 : 0;
@@ -177,7 +181,7 @@ export class BlynkWidgetDimmer extends BlynkWidgetBase {
     getMax():   number  { return this.dimmerHigh; }
 
     setPin(): string {
-        return `${this.baseUrl}/update/${this.pinUrlLabel}?value=${+this.dimmerCur}`;
+        return `${this.baseUrl}/external/api/update?token=${this.token}&${this.pinUrlLabel}=${+this.dimmerCur}`;
     }
 
     setValue(value: string): void {
