@@ -1,8 +1,8 @@
 {
-    "name": "homebridge-blynk-platform",
+    "name": "homebridge-blynk-plugin",
     "displayName": "Homebridge Blynk Platform",
     "version": "0.3.0",
-    "description": "Homebridge plugin for the Blynk platform",
+    "description": "Based on Peter J Wojciechowski but updated to use the new API",
     "main": "dist/index.js",
     "scripts": {
         "build1": "rimraf ./dist && tsc",
@@ -15,7 +15,7 @@
         "test": "jest"
     },
     "author": {
-        "name": "Peter J Wojciechowski",
+        "name": "",
         "email": "peterwoj@dwellersoul.com"
     },
     "engines": {
